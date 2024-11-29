@@ -1,50 +1,53 @@
-# Welcome to your Expo app 👋
+# Adım Sayar 👣
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Adım sayar, günlük aktivitelerinizi takip etmenizi sağlayan bir mobil uygulamadır. Telefonunuzun hareket sensörlerini kullanarak adımlarınızı sayar ve yakılan kalorileri hesaplar.
 
-## Get started
+## Özellikler
 
-1. Install dependencies
+- 📱 Gerçek zamanlı adım sayımı
+- 🔥 Kalori takibi
+- 📊 Hareket sensör verileri
+- 💾 Günlük verileri otomatik kaydetme
+- 🔄 Günlük sıfırlama
 
+## Başlangıç
+
+1. Gereksinimleri yükleyin:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Uygulamayı başlatın:
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Test Etme
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Uygulamayı test etmek için:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. Expo Go ile test:
+   - Telefonunuza Expo Go uygulamasını yükleyin
+   - QR kodu okutun
+   - Aynı WiFi ağında olduğunuzdan emin olun
 
-## Get a fresh project
+2. APK ile test:
+   ```bash
+   npx eas build -p android --profile preview
+   ```
 
-When you're ready, run:
+## Teknik Detaylar
 
-```bash
-npm run reset-project
-```
+- React Native & Expo ile geliştirildi
+- TypeScript kullanıldı
+- Expo Sensors API kullanıldı
+- AsyncStorage ile veri saklama
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Geliştirme
 
-## Learn more
+Projeyi geliştirmek için:
 
-To learn more about developing your project with Expo, look at the following resources:
+1. Repo'yu klonlayın
+2. Bağımlılıkları yükleyin
+3. `src` klasöründeki dosyaları düzenleyin
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
