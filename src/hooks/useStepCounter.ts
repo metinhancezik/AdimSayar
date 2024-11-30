@@ -2,66 +2,71 @@ import { useState, useEffect, useCallback } from 'react';
 import { Alert, Platform } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SensorData, DailyData } from '../types';
+import { DailyData, StepHistory } from '../types';
 
 // Sabit değerler
-const THRESHOLD = 1.2;                    // Hassasiyeti azalttık
-const MIN_TIME_BETWEEN_STEPS = 400;       // Süreyi arttırdık
+const THRESHOLD = 1.2;
+const MIN_TIME_BETWEEN_STEPS = 400;
 const CALORIES_PER_STEP = 0.04;
+const HISTORY_KEY = 'stepHistory';
 
 export const useStepCounter = () => {
   // State tanımlamaları
   const [steps, setSteps] = useState<number>(0);
   const [calories, setCalories] = useState<number>(0);
-  const [{ x, y, z }, setData] = useState<SensorData>({ x: 0, y: 0, z: 0 });
   const [lastY, setLastY] = useState<number>(0);
   const [lastStepTime, setLastStepTime] = useState<number>(0);
+  const [history, setHistory] = useState<StepHistory>([]);
 
-  // Kalori hesaplama fonksiyonunu useCallback ile sarmalıyoruz
+  // Kalori hesaplama
   const calculateCalories = useCallback((stepCount: number) => {
     setCalories(Number((stepCount * CALORIES_PER_STEP).toFixed(1)));
   }, []);
 
-  // Verileri yükleme
-  const loadDailyData = async () => {
+  // Geçmiş verileri yükleme
+  const loadHistory = async () => {
     try {
-      const savedData = await AsyncStorage.getItem('dailyData');
-      if (savedData) {
-        const data: DailyData = JSON.parse(savedData);
-        const today = new Date().toDateString();
-        
-        if (data.date === today) {
-          setSteps(data.steps);
-          setCalories(data.calories);
-        }
+      const savedHistory = await AsyncStorage.getItem(HISTORY_KEY);
+      if (savedHistory) {
+        setHistory(JSON.parse(savedHistory));
       }
     } catch (error) {
-      console.log('Veri yükleme hatası:', error);
+      console.log('Geçmiş yükleme hatası:', error);
     }
   };
 
-  // Verileri kaydetme
-  const saveDailyData = async () => {
+  // Günlük veriyi geçmişe kaydetme
+  const saveToHistory = async () => {
     try {
-      const dailyData: DailyData = {
+      const today = new Date().toDateString();
+      const newHistory = history.filter(item => item.date !== today);
+      
+      newHistory.push({
+        date: today,
         steps,
-        calories,
-        date: new Date().toDateString()
-      };
-      await AsyncStorage.setItem('dailyData', JSON.stringify(dailyData));
+        calories
+      });
+
+      // Son 30 günü tut
+      const last30Days = newHistory.slice(-30);
+      
+      await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(last30Days));
+      setHistory(last30Days);
     } catch (error) {
-      console.log('Veri kaydetme hatası:', error);
+      console.log('Geçmiş kaydetme hatası:', error);
     }
   };
 
   // Verileri yükleme effect'i
   useEffect(() => {
-    loadDailyData();
+    loadHistory();
   }, []);
 
   // Verileri kaydetme effect'i
   useEffect(() => {
-    saveDailyData();
+    if (steps > 0) {
+      saveToHistory();
+    }
   }, [steps, calories]);
 
   // Sensör işlemleri
@@ -75,10 +80,9 @@ export const useStepCounter = () => {
           return;
         }
 
-        await Accelerometer.setUpdateInterval(100);  // Güncelleme süresini arttırdık
+        await Accelerometer.setUpdateInterval(100);
         
         subscription = Accelerometer.addListener(accelerometerData => {
-          setData(accelerometerData);
           const currentY = accelerometerData.y;
           const now = Date.now();
           
@@ -91,7 +95,7 @@ export const useStepCounter = () => {
           );
           
           if (magnitudeY > THRESHOLD && 
-              magnitudeTotal > THRESHOLD * 1.3 &&    // Eşiği arttırdık
+              magnitudeTotal > THRESHOLD * 1.3 && 
               (now - lastStepTime) > MIN_TIME_BETWEEN_STEPS) {
             
             setSteps(prevSteps => {
@@ -111,11 +115,11 @@ export const useStepCounter = () => {
 
     startAccelerometer();
     return () => subscription?.remove();
-  }, [lastY, steps, lastStepTime, calculateCalories]);  // calculateCalories'i dependency'e ekledik
+  }, [lastY, steps, lastStepTime, calculateCalories]);
 
   return {
     steps,
     calories,
-    sensorData: { x, y, z }
+    history
   };
 };
