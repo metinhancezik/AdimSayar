@@ -17,17 +17,21 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.adimsayar"
+      "bundleIdentifier": "com.metinhan.adimsayar"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#2196F3"
       },
-      "package": "com.yourname.adimsayar",
+      "package": "com.metinhan.adimsayar",
       "permissions": [
-        "ACTIVITY_RECOGNITION"
-      ]
+        "ACTIVITY_RECOGNITION",
+        "FOREGROUND_SERVICE",
+        "WAKE_LOCK",
+        "RECEIVE_BOOT_COMPLETED"
+      ],
+      "versionCode": 1 
     },
     "web": {
       "bundler": "metro",
@@ -44,11 +48,25 @@
           "resizeMode": "contain",
           "backgroundColor": "#2196F3"
         }
+      ],
+      [
+        "expo-background-fetch",
+        {
+          "startOnBoot": true
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "newArchEnabled": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c834d88d-672c-4677-80a8-6cf08f3bec01"
+      }
     }
   }
 }
