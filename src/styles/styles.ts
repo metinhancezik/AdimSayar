@@ -50,6 +50,45 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 5,
   },
+  
+statsContainer: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: '#ffffff',
+},
+
+statsTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginBottom: 20,
+  color: '#333',
+},
+
+statsInfoContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: 20,
+  padding: 10,
+  backgroundColor: '#f5f5f5',
+  borderRadius: 12,
+},
+
+statsInfoItem: {
+  alignItems: 'center',
+  flex: 1,
+},
+
+statsInfoLabel: {
+  fontSize: 14,
+  color: '#666',
+  marginBottom: 5,
+},
+
+statsInfoValue: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  color: '#333',
+},
 });
 
 export default styles;  // 👈 default export olarak değiştirdik

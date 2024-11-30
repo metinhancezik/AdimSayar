@@ -1,19 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Header } from '../../src/components/Header';
 import { StepCounter } from '../../src/components/StepCounter';
-import { SensorData } from '../../src/components/SensorData';
+import { StatsScreen } from '../../src/components/StatsScreen';
 import { useStepCounter } from '../../src/hooks/useStepCounter';
-import styles from '../../src/styles/styles';  // 👈 { styles } yerine styles
+import styles from '../../src/styles/styles';
 
 export default function HomeScreen() {
-  const { steps, calories, sensorData } = useStepCounter();
+  const { steps, calories, history } = useStepCounter();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header />
       <StepCounter steps={steps} calories={calories} />
-      <SensorData data={sensorData} />
-    </View>
+      <StatsScreen history={history} />
+    </ScrollView>
   );
 }
