@@ -50,19 +50,16 @@ class StepCounterWidget : AppWidgetProvider() {
     companion object {
         fun updateWidgetData(context: Context, steps: Int, calories: Double) {
             try {
-                // Verileri JSON formatında kaydet
                 val data = JSONObject().apply {
                     put("steps", steps)
                     put("calories", calories)
                 }
 
-                // SharedPreferences'a kaydet
                 context.getSharedPreferences("dailyData", Context.MODE_PRIVATE)
                     .edit()
                     .putString("dailyData", data.toString())
                     .apply()
 
-                // Tüm widget'ları güncelle
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 val thisWidget = ComponentName(context, StepCounterWidget::class.java)
                 val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
